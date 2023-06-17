@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Bangla BooK Reader</string>
+    <string name="name_account">Please enter valid email and password.Password should contain 6 characters or more </string>
+</resources>
