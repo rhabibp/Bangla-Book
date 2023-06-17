@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "282604329094",
+    "project_id": "bookreader-70b9a",
+    "storage_bucket": "bookreader-70b9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282604329094:android:dd48b3176c05ea25de9907",
+        "android_client_info": {
+          "package_name": "com.timepass.bookreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "282604329094-8vtr9bdapt9pbnvprlq5i2l2gt7lkeem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3NOC_prkT6HIYDDhNhr3AipsHzs5p1K4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282604329094-8vtr9bdapt9pbnvprlq5i2l2gt7lkeem.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
