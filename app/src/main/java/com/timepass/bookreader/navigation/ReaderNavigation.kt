@@ -58,20 +58,7 @@ fun ReaderNavigation() {
                         bookDescription = bookDescription.toString(),
                         bookDownloadLink = Uri.parse(bookDownloadLink)
 
-//                    bookDownloadLink = bookDownLoadLink.toString(),
-//                    bookDescription = bookDescription.toString()
                     )
-                    //            val bookAuthor = backStackEntry.arguments?.getString("author")
-//            val bookDownLoadLink = URLEncoder.encode(backStackEntry.arguments?.getString("bookDownloadLink"),StandardCharsets.UTF_8.toString())
-//            val bookDescription = backStackEntry.arguments?.getString("bookDescription")
-
-
-
-
-
-
-
-
         }
         composable(BookReaderScreens.UpdateScreen.name){
             UpdateScreen(navController = navController)
