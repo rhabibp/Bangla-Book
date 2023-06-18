@@ -5,9 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -46,36 +50,72 @@ import com.timepass.bookreader.navigation.BookReaderScreens
 @Composable
 fun NewBookList(navController: NavController) {
     var bookList by remember { mutableStateOf<List<MyBooks>?>(null) }
+    val itemsToLoad = remember { mutableStateOf(5) }
 
-    JetFirestore(path = { collection("bookDetails")},
-        queryOnCollection = {orderBy("timeStamp", Query.Direction.DESCENDING)},
+    JetFirestore(path = { collection("bookDetails") },
+        queryOnCollection = { orderBy("timeStamp", Query.Direction.DESCENDING) },
 //        limitOnSingleTimeCollectionFetch = 2,
         onSingleTimeCollectionFetch = { value, exception ->
             bookList = value.getListOfObjects()
 
         }
-    ){
+    ) {
         bookList?.let {
-            LazyColumn() {
-                items(it) {
-                    Extracted(
-                        it,
-                        onItemClick = { navController.navigate(BookReaderScreens.DetailsScreen.name + "/${it.title}/${it.author}/${it.bookDescription}/${Uri.encode(it.bookDownloadLink)}}") }
-                    )
+            Column(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(it.subList(0, itemsToLoad.value)) {
+                        Extracted(
+                            it,
+                            onItemClick = {
+                                navController.navigate(
+                                    BookReaderScreens.DetailsScreen.name +
+                                            "/${it.title}/${it.author}/${it.bookDescription}/${
+                                                Uri.encode(
+                                                    it.bookDownloadLink
+                                                )
+                                            }}"
+                                )
+                            }
+                        )
 
+                    }
+
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+
+                            Button(
+                                modifier = Modifier.height(50.dp).width(90.dp), onClick = {
+                                    val nextIndex = itemsToLoad.value + 5
+                                    if (nextIndex <= bookList!!.size) {
+                                        itemsToLoad.value = nextIndex
+                                    } else if (itemsToLoad.value < bookList!!.size) {
+                                        itemsToLoad.value = bookList!!.size
+                                    }
+                                },
+                                enabled = itemsToLoad.value < bookList!!.size,
+                                colors = ButtonDefaults.buttonColors(Color(0xffFF7421))
+                            )
+                            {
+                                Text(text = "Next", color = Color.White)
+                            }
+                        }
+                    }
                 }
-            }
 
-        }
+
+            }
 
         }
 
 
     }
+}
 
 @Composable
 fun Extracted(it: MyBooks,onItemClick: ()-> Unit) {
-    Card(modifier = Modifier.clickable{onItemClick()}, elevation = 5.dp) {
+    Card(modifier = Modifier
+        .clickable { onItemClick() }
+        .fillMaxWidth(), elevation = 5.dp) {
 
     Column(
         modifier = Modifier
