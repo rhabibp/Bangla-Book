@@ -2,6 +2,7 @@ package com.timepass.bookreader.screens.login
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,16 +11,22 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.timepass.bookreader.components.downloader.DownloadLink
 import com.timepass.bookreader.model.BooksUser
 import kotlinx.coroutines.launch
 
-class LoginScreenViewModel:ViewModel()  {
-    //    val loadingState = MutableStateFlow(LoadingState.IDLE)
+class LoginScreenViewModel:ViewModel() {
+    enum class LoginResult {
+        Success,
+        Error
+    }
+//        var loadingState = MutableStateFlow(LoadingState.IDLE)
     private val auth: FirebaseAuth = Firebase.auth
 
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
+    var showErrorState =
+        mutableStateOf(false)
+
 
     fun userSignIn(email: String, password: String, home: () -> Unit) = viewModelScope.launch {
         try {
@@ -29,16 +36,20 @@ class LoginScreenViewModel:ViewModel()  {
                         home()
 
                     } else {
-                        Log.d("TAG", "userSignIn: ")
+
                     }
 
                 }
 
         } catch (ex: Exception) {
-            Log.d("Exception", "userSignIn: ${ex.message} ")
+
+
+
         }
 
     }
+
+
 
 
     fun userAccountCreate(
@@ -65,11 +76,13 @@ class LoginScreenViewModel:ViewModel()  {
 @SuppressLint("SuspiciousIndentation")
 private fun createUser(displayName: String?) {
             val userId = auth.currentUser?.uid
+    val userEmail = auth.currentUser?.email
     val user = BooksUser(
         userId = userId.toString(),
                      id = null,
         displayName = displayName.toString(),
-        avatarUrl = ""
+        avatarUrl = "",
+        userEmail = userEmail.toString()
     ).toMap()
 
            FirebaseFirestore.getInstance().collection("users")
@@ -78,18 +91,5 @@ private fun createUser(displayName: String?) {
 
 
         }
-@SuppressLint("SuspiciousIndentation")
-private fun createDownloadLink(link: String?) {
-            val userId = auth.currentUser?.uid
-    val bookLink = DownloadLink(
 
-        link = link.toString(),
-    )
-
-           FirebaseFirestore.getInstance().collection("downloadLinks")
-               .add(bookLink)
-
-
-
-        }
 }
