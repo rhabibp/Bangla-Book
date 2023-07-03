@@ -14,7 +14,7 @@ class AndroidDownloader (private val context: Context):Downloader {
 
         val request = DownloadManager.Request(url.toUri())
             .setMimeType("application/pdf")
-            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+//            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setTitle(fileName)
             .addRequestHeader("Header","Bearer <Token>")

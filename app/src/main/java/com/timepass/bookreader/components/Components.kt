@@ -225,7 +225,7 @@ fun HomeContent(navController: NavController,context: Context) {
 //       ReadingRightNowArea(books = listOf() , navController = navController)
 
         Spacer(modifier = Modifier.height(10.dp))
-        TitleSection(modifier = Modifier.padding(top = 30.dp), label = "Reading List" )
+        TitleSection(modifier = Modifier.padding(top = 30.dp), label = "Latest Book List" )
         Spacer(modifier = Modifier
             .height(2.dp)
             .padding(start = 5.dp)
@@ -304,7 +304,7 @@ fun BookReaderAppBar(
         },
         actions = {
             IconButton(onClick = { FirebaseAuth.getInstance().signOut().run {
-                navController.navigate(BookReaderScreens.LoginScreen.name)
+                navController.navigate(BookReaderScreens.LoginScreen2.name)
                 {
                     popUpTo(BookReaderScreens.HomeScreen.name) {
                         inclusive = true

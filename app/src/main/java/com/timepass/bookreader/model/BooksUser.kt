@@ -1,6 +1,7 @@
 package com.timepass.bookreader.model
 
 data class BooksUser(
+    val userEmail: String,
     val userId: String,
     val id: String?,
     val displayName: String,
@@ -10,7 +11,8 @@ data class BooksUser(
         return mutableMapOf(
             "user_id" to this.userId,
         "user_name" to this.displayName,
-        "avatar_url" to this.avatarUrl
+        "avatar_url" to this.avatarUrl,
+            "user_email" to this.userEmail
         )
     }
 }

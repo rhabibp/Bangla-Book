@@ -10,10 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.timepass.bookreader.screens.BookReaderSplashScreen
 import com.timepass.bookreader.screens.SignUp.SignUpScreen
+import com.timepass.bookreader.screens.UserRegForm
 import com.timepass.bookreader.screens.detail.DetailsScreen
 import com.timepass.bookreader.screens.detail.DetailsViewModel
 import com.timepass.bookreader.screens.home.HomeScreen
-import com.timepass.bookreader.screens.login.LoginScreen
+import com.timepass.bookreader.screens.login.LoginScreen2
 import com.timepass.bookreader.screens.search.SearchScreen
 import com.timepass.bookreader.screens.stats.StatsScreen
 import com.timepass.bookreader.screens.update.UpdateScreen
@@ -32,11 +33,18 @@ fun ReaderNavigation() {
         composable(BookReaderScreens.HomeScreen.name){
             HomeScreen(navController = navController,detailsViewModel = DetailsViewModel())
         }
-        composable(BookReaderScreens.LoginScreen.name){
-            LoginScreen(navController = navController)
+//        composable(BookReaderScreens.LoginScreen.name){
+//            LoginScreen(navController = navController)
+//        }
+        composable(BookReaderScreens.LoginScreen2.name){
+            LoginScreen2(navController = navController)
         }
+        composable(BookReaderScreens.UserRegForm.name){
+            UserRegForm(navController = navController)
+        }
+
         val detailTitle = BookReaderScreens.DetailsScreen.name
-        composable("$detailTitle/{title}/{author}/{bookDescription}/{bookDownloadLink}", arguments = listOf(navArgument("title"){
+        composable("$detailTitle/{title}/{author}/{bookDescription}/{bookDownloadLink}/{bookImageLink}", arguments = listOf(navArgument("title"){
             type = NavType.StringType
         },
             navArgument("author"){
@@ -47,16 +55,21 @@ fun ReaderNavigation() {
             },
             navArgument("bookDownloadLink"){
                 type = NavType.StringType
+            },
+            navArgument("bookImageLink"){
+                type = NavType.StringType
             }
         )){ backStackEntry ->
               val title=  backStackEntry.arguments?.getString("title")
               val author=  backStackEntry.arguments?.getString("author")
             val bookDescription = backStackEntry.arguments?.getString("bookDescription")
             val bookDownloadLink = backStackEntry.arguments?.getString("bookDownloadLink")
+            val bookImageLink = backStackEntry.arguments?.getString("bookImageLink")
                     DetailsScreen(
                         navController = navController, title = title.toString(), author =author.toString(),
                         bookDescription = bookDescription.toString(),
-                        bookDownloadLink = Uri.parse(bookDownloadLink)
+                        bookDownloadLink = Uri.parse(bookDownloadLink),
+                        bookImageLink = Uri.parse(bookImageLink)
 
                     )
         }

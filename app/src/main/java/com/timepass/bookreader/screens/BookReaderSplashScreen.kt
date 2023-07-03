@@ -46,7 +46,7 @@ fun BookReaderSplashScreen(navController: NavController,modifier: Modifier = Mod
                 }
             }
         } else {
-            navController.navigate(BookReaderScreens.LoginScreen.name)
+            navController.navigate(BookReaderScreens.LoginScreen2.name)
             {
                 popUpTo(BookReaderScreens.SplashScreen.name) {
                     inclusive = true
