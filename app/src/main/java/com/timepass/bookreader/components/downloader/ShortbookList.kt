@@ -1,12 +1,15 @@
 package com.timepass.bookreader.components.downloader
 
-import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +31,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,17 +54,52 @@ import com.jet.firestore.JetFirestore
 import com.jet.firestore.getListOfObjects
 import com.timepass.bookreader.model.MyBooks
 import com.timepass.bookreader.navigation.BookReaderScreens
+import com.timepass.bookreader.screens.login.NoInternetContent
+import com.timepass.bookreader.screens.login.checkInternetConnection
 
 @Composable
 fun NewBookList(navController: NavController) {
     val context = LocalContext.current
+    val isLoading = remember { mutableStateOf(false) }
     val isConnected = remember { mutableStateOf(true) }
     val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        context.getSystemService(ConnectivityManager::class.java)
+    val isNetworkAvailable = remember { mutableStateOf(true) }
+    val isCheckingConnection = remember { mutableStateOf(true) }
     var bookList by remember { mutableStateOf<List<MyBooks>?>(null) }
     val itemsToLoad = remember { mutableStateOf(6) }
+    val networkCallback = remember {
+        object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                isNetworkAvailable.value = true
+            }
+
+            override fun onLost(network: Network) {
+                isNetworkAvailable.value = false
+            }
+        }
+    }
+    DisposableEffect(Unit) {
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+
+        onDispose {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        }
+    }
+    LaunchedEffect(Unit) {
+        checkInternetConnection { isConnected ->
+            isNetworkAvailable.value = isConnected
+            isCheckingConnection.value = false
+        }
+    }
 
 
+    if (isNetworkAvailable.value) {
         JetFirestore(path = { collection("bookDetails") },
             queryOnCollection = { orderBy("timeStamp", Query.Direction.DESCENDING) },
 //        limitOnSingleTimeCollectionFetch = 2,
@@ -69,61 +109,71 @@ fun NewBookList(navController: NavController) {
             }
         ) {
             bookList?.let {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                        items(it.subList(0, itemsToLoad.value)) {
-                            Extracted(it, onItemClick = {
-                                navController.navigate(
-                                    BookReaderScreens.DetailsScreen.name +
-                                            "/${it.title}/${it.author}/${it.bookDescription}/${
-                                                Uri.encode(
-                                                    it.bookDownloadLink
-                                                )
-                                            }/${Uri.encode(it.bookImageLink)}"
-                                )
-                            })
 
-                        }
-                        item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End
-//                            contentAlignment = Alignment.Center
-                            ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxSize(0.935f)
+                    ) {
+                            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                                items(it.subList(0, itemsToLoad.value)) {
+                                    Extracted(it, onItemClick = {
+                                        navController.navigate(
+                                            BookReaderScreens.DetailsScreen.name +
+                                                    "/${it.title}/${it.author}/${it.bookDescription}/${
+                                                        Uri.encode(
+                                                            it.bookDownloadLink
+                                                        )
+                                                    }/${Uri.encode(it.bookImageLink)}"
+                                        )
+                                    })
 
-                                Button(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(5.dp)
-                                        .height(50.dp)
-                                        .width(90.dp), onClick = {
-                                        val nextIndex = itemsToLoad.value + 5
-                                        if (nextIndex <= bookList!!.size) {
-                                            itemsToLoad.value = nextIndex
-                                        } else if (itemsToLoad.value < bookList!!.size) {
-                                            itemsToLoad.value = bookList!!.size
-                                        }
-                                    },
-                                    enabled = itemsToLoad.value < bookList!!.size,
-                                    colors = ButtonDefaults.buttonColors(Color(0xffFF7421))
-                                )
-                                {
-                                    Text(text = "Next →", color = Color.White, fontSize = 20.sp)
                                 }
+
                             }
 
+
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Box(contentAlignment = Alignment.CenterEnd) {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(0.2f), onClick = {
+                                val nextIndex = itemsToLoad.value + 5
+                                if (nextIndex <= bookList!!.size) {
+                                    itemsToLoad.value = nextIndex
+                                } else if (itemsToLoad.value < bookList!!.size) {
+                                    itemsToLoad.value = bookList!!.size
+                                }
+                            }
+                                ,
+                            colors = ButtonDefaults.buttonColors(
+                                Color(0xFFFF7421),
+                                disabledBackgroundColor = Color(0x00FF2121)
+                            )
+                        )
+                        {
+                            Text(text = "Next →", color = Color.White, fontSize = 15.sp)
                         }
                     }
-
                 }
+
 
             }
 
-
-        }
+        }   else {
+        NoInternetContent()
+    }
 
     }
+
+
+
+
 
 
 
@@ -191,7 +241,7 @@ fun Extracted(it: MyBooks,onItemClick: ()-> Unit) {
             )
 
             Text(
-                text = it.title.toString(),
+                text = it.author.toString(),
                 style = MaterialTheme.typography.caption
             )
         }

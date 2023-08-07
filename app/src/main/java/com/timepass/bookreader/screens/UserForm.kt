@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,7 +56,6 @@ fun UserRegForm(    loading: Boolean = false,
             emailState = email,
             onAction = KeyboardActions { passwordFocusRequest.requestFocus() })
         PasswordInput (
-            Modifier.focusRequester(passwordFocusRequest),
             passwordState = password,
             labelId = "Password",
             enabled = !loading,

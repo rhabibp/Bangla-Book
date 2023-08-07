@@ -1,11 +1,11 @@
 package com.timepass.bookreader.model
 
 data class BooksUser(
-    val userEmail: String,
-    val userId: String,
-    val id: String?,
-    val displayName: String,
-    val avatarUrl: String
+    val userEmail: String = "",
+    val userId: String = "",
+    val id: String? = "",
+    val displayName: String = "",
+    val avatarUrl: String = ""
 ) {
     fun toMap(): MutableMap<String,Any>{
         return mutableMapOf(

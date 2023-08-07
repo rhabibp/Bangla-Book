@@ -1,7 +1,10 @@
 package com.timepass.bookreader.screens.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.timepass.bookreader.components.downloader.AndroidDownloader
 import com.timepass.bookreader.navigation.BookReaderScreens
 import com.timepass.bookreader.ui.theme.myFont5
 
@@ -57,7 +59,7 @@ fun DetailsScreen(
                 contentDescription = "Back Arrow", tint = Color(0xFFFF7421)
             )
             Text(
-                text = "Book's Detail",
+                text = "Book Details",
                 color = Color(0xFFFF7421),
                 fontSize = 25.sp,
                 fontFamily = myFont5,
@@ -82,6 +84,10 @@ private fun BookDetails(
     bookDescription: String?,
     bookDownloadLink: Uri
 ) {
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult(),
+        ){
+
+    }
     Column(
         Modifier
             .fillMaxSize()
@@ -121,8 +127,11 @@ private fun BookDetails(
             Text(text = "Book Details: \n $bookDescription", fontSize = 15.sp,
                 modifier = Modifier.padding(5.dp))
             Button(onClick = {
+                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(bookDownloadLink.toString()))
+                launcher.launch(intent)
 
-                AndroidDownloader(context).downloadFile(bookDownloadLink.toString())
+//                AndroidDownloader(context).downloadFile(bookDownloadLink.toString())
+
             },
                 colors = ButtonDefaults.buttonColors(Color(0xFFFF7421))
             ) {

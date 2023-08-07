@@ -40,6 +40,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -59,12 +60,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.timepass.bookreader.R
 import com.timepass.bookreader.components.downloader.NewBookList
@@ -72,6 +71,7 @@ import com.timepass.bookreader.model.MyBooks
 import com.timepass.bookreader.navigation.BookReaderScreens
 import com.timepass.bookreader.ui.theme.myFont3
 import com.timepass.bookreader.ui.theme.myFont5
+import java.util.Date
 
 
 @Composable
@@ -100,9 +100,9 @@ fun InputField(
         enabled = enabled,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeiAction),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color(0xFFFF7421),
-            focusedLabelColor = Color(0xFFFF7421),
-            unfocusedBorderColor = Color(0xFFFF7421)
+            focusedBorderColor = Color(0xffff7f28),
+            focusedLabelColor = Color(0xffff7f28),
+            unfocusedBorderColor = Color(0xffff7f28)
         )
 
     )
@@ -112,7 +112,6 @@ fun InputField(
 
 @Composable
 fun EmailInput(
-    modifier: Modifier = Modifier,
     emailState: MutableState<String>,
     labelId: String = "Email",
     enabled: Boolean = true,
@@ -135,7 +134,6 @@ fun EmailInput(
 
 @Composable
 fun PasswordInput(
-    focusRequester: Modifier,
     passwordState: MutableState<String>,
     labelId: String,
     enabled: Boolean,
@@ -147,9 +145,9 @@ fun PasswordInput(
     else PasswordVisualTransformation()
     OutlinedTextField(value = passwordState.value,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color(0xFFFF7421),
-            focusedLabelColor = Color(0xFFFF7421),
-            unfocusedBorderColor = Color(0xFFFF7421)
+            focusedBorderColor = Color(0xffff7f28),
+            focusedLabelColor = Color(0xffff7f28),
+            unfocusedBorderColor = Color(0xffff7f28)
         ) ,onValueChange ={
         passwordState.value = it
 
@@ -186,7 +184,7 @@ fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
 }
 @Composable
 fun HomeContent(navController: NavController,context: Context) {
-    val listofBooks = listOf(MyBooks(timeStamp = Timestamp.now())
+    val listofBooks = listOf(MyBooks(timeStamp = Date())
     )
 
     Column(Modifier.padding(2.dp)) {
@@ -208,7 +206,7 @@ fun HomeContent(navController: NavController,context: Context) {
                 Spacer(modifier = Modifier.padding(start = 190.dp))
                 Column(modifier = Modifier) {
                     Icon(
-                        imageVector = Icons.Default.AccountCircle, tint = Color(0xFFFF7421),
+                        imageVector = Icons.Default.AccountCircle, tint = Color(0xffff7f28),
                         modifier = Modifier
                             .size(50.dp)
                             .clickable { navController.navigate(BookReaderScreens.StatsScreen.name) },
@@ -230,7 +228,7 @@ fun HomeContent(navController: NavController,context: Context) {
             .height(2.dp)
             .padding(start = 5.dp)
             .fillMaxWidth()
-            .background(Color(0xffFF7421)))
+            .background(Color(0xffff7f28)))
         NewBookList(navController)
 
 
@@ -259,7 +257,7 @@ fun HorizontalScrollableComponent(listofBooks: List<MyBooks>,onCardPress: (Strin
         .heightIn(280.dp)
         .horizontalScroll(scrollState)) {
         for (book in listofBooks){
-            ListCardArea(){
+            ListCardArea(MyBooks(timeStamp = Date())){
                 onCardPress(it)
             }
         }
@@ -274,31 +272,21 @@ fun HorizontalScrollableComponent(listofBooks: List<MyBooks>,onCardPress: (Strin
 @Composable
 fun BookReaderAppBar(
     title : String,
-//    icon: ImageVector? = null,
-//    onBackPress: ()-> Unit = {},
     showProfile : Boolean = true,
-    navController: NavController
+    navController: NavController,
+    onNavigationClick: () -> Unit
 
 ) {
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (showProfile) {
-                    Image(
-                        painter = painterResource(id = R.drawable.bookreader_logo),
-                        contentDescription = "logo",
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(5.dp))
-                            .scale(0.6f)
-                            .padding(start = 10.dp)
-                    )
-                }
+
                 Text(
                     text = title,
-                    color = Color(0xFFFF7421),
-                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontSize = 27.sp,
                     fontFamily = myFont5,
-                    modifier = Modifier.padding(top = 10.dp)
+                    modifier = Modifier
                 )
             }
         },
@@ -313,7 +301,7 @@ fun BookReaderAppBar(
             }
             }) {
                 Icon(
-                    painterResource(id = R.drawable.close), tint = Color(0xFFFF7421),
+                    painterResource(id = R.drawable.close), tint = Color.White,
                     contentDescription = "logout",
                     modifier = Modifier
                         .scale(0.5f)
@@ -321,9 +309,14 @@ fun BookReaderAppBar(
                 )
 
             }
-        }, backgroundColor = Color.White
-    )
+        }, backgroundColor = Color(0xffff7f28),
+        navigationIcon = {
+            IconButton(onClick =  onNavigationClick) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Toggle Drawer" )
 
+            }
+        }
+    )
 }
 @Composable
 fun TitleSection(modifier: Modifier,label: String) {
@@ -337,7 +330,7 @@ fun FABContent(onTap: () -> Unit) {
     FloatingActionButton(
         onClick = {onTap()},
         shape = CircleShape,
-        backgroundColor = Color(0xFFFF7421),
+        backgroundColor = Color(0xffff7f28),
 
         ) {
         Icon(
@@ -389,10 +382,10 @@ fun RoundedButton(
 
 
 @SuppressLint("SuspiciousIndentation")
-@Preview(showBackground = true)
+
 @Composable
 fun ListCardArea(
-    book: MyBooks = MyBooks(timeStamp = Timestamp.now()),
+    book: MyBooks,
     onPressDetail: (String) -> Unit = {},
 ) {
 
@@ -495,11 +488,11 @@ fun SearchScreen(navController: NavController, textLabel: String) {
                 modifier = Modifier
                     .padding(start = 15.dp, top = 15.dp, end = 60.dp)
                     .clickable { navController.navigate(BookReaderScreens.HomeScreen.name) },
-                contentDescription = "Back Arrow", tint = Color(0xFFFF7421)
+                contentDescription = "Back Arrow", tint = Color(0xffff7f28)
             )
             Text(
                 textLabel,
-                color = Color(0xFFFF7421),
+                color = Color(0xffff7f28),
                 fontSize = 25.sp,
                 fontFamily = myFont5,
                 modifier = Modifier.padding(top = 10.dp)

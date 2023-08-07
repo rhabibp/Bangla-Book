@@ -38,12 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.google.firebase.Timestamp
 import com.timepass.bookreader.components.InputField
 import com.timepass.bookreader.components.downloader.DownloadField
 import com.timepass.bookreader.model.MyBooks
 import com.timepass.bookreader.navigation.BookReaderScreens
 import com.timepass.bookreader.ui.theme.myFont5
+import java.util.Date
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -68,22 +68,6 @@ fun SearchScreen(navController: NavController) {
     })
     {
         DownloadField(context = LocalContext.current)
-//        Surface {
-//
-//            Column {
-//                SearchField(modifier = Modifier
-//                    .padding(15.dp)
-//                    .fillMaxWidth())
-//
-//                Spacer(modifier = Modifier.height(15.dp))
-//
-//
-////                SearchedBookList(navController)
-//
-//
-//
-//
-//            }
 
 
         }
@@ -93,6 +77,7 @@ fun SearchScreen(navController: NavController) {
 
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
@@ -127,7 +112,7 @@ fun SearchField(
 @Composable
 fun SearchedBookList(navController: NavController) {
 
-    val listofBooks = listOf(MyBooks(timeStamp = Timestamp.now())
+    val listofBooks = listOf(MyBooks(timeStamp = Date())
     )
     LazyColumn(modifier = Modifier.fillMaxSize()){
         items(items = listofBooks) { book ->

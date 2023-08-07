@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.timepass.bookreader.screens.BookReaderSplashScreen
 import com.timepass.bookreader.screens.SignUp.SignUpScreen
 import com.timepass.bookreader.screens.UserRegForm
+import com.timepass.bookreader.screens.categories.BookCategories
 import com.timepass.bookreader.screens.detail.DetailsScreen
 import com.timepass.bookreader.screens.detail.DetailsViewModel
 import com.timepass.bookreader.screens.home.HomeScreen
@@ -84,6 +85,10 @@ fun ReaderNavigation() {
         }
         composable(BookReaderScreens.SignUpScreen.name){
             SignUpScreen(navController = navController)
+        }
+
+        composable(BookReaderScreens.Categories.name){
+            BookCategories(navController = navController)
         }
     }
 }

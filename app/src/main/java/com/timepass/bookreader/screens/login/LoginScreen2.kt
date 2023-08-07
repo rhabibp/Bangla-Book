@@ -124,7 +124,7 @@ fun LoginScreen2(navController: NavController) {
                 OutlinedTextField(
                     value = email.value,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFFFF7421),
+                        focusedBorderColor = Color(0xffff7f28),
                         focusedLabelColor = Color(0xFFFF7421),
                         unfocusedBorderColor = Color(0xFFFF7421)),
                     onValueChange = { email.value = it },
@@ -251,7 +251,7 @@ fun EmptyErrorMessage() {
 }
 
 @Composable
-private fun NoInternetContent() {
+fun NoInternetContent() {
 
     Column(
         modifier = Modifier
@@ -294,7 +294,7 @@ private fun NoInternetContent() {
     }
 }
 @OptIn(DelicateCoroutinesApi::class)
-private fun checkInternetConnection(callback: (Boolean) -> Unit) {
+ fun checkInternetConnection(callback: (Boolean) -> Unit) {
     GlobalScope.launch(Dispatchers.IO) {
         val socket = Socket()
         try {

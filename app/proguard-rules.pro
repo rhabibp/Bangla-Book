@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keep class com.google.firebase.firestore.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+-keepclassmembers class com.timepass.bookreader.model.MyBooks {
+ *;
+}
+-keepclassmembers class com.timepass.bookreader.components.downloader.ShortbookListKt{ *;}
+-keepclassmembers class com.timepass.bookreader.components.downloader.ForDownloadKt{ *;}

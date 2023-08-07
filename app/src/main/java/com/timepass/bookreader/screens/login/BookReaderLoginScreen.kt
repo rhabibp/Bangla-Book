@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -27,59 +26,6 @@ import com.timepass.bookreader.components.EmailInput
 import com.timepass.bookreader.components.PasswordInput
 
 
-
-
-//@Composable
-//fun LoginScreen(navController: NavController, viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-//
-//
-//    val showLoginForm = rememberSaveable() {
-//        mutableStateOf(true)
-//    }
-//    Column(
-//        modifier = Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    )
-//    {
-//        Text(text = "বুকস অব বিডি", fontSize =45.sp , fontFamily = myfonts, modifier = Modifier.padding(top = 50.dp))
-//        if (showLoginForm.value) UserForm(
-//            loading = false,
-//            onCreateAccount = false
-//        ) { email, password ->
-//            viewModel.userSignIn(email = email, password = password){
-//                navController.navigate(BookReaderScreens.HomeScreen.name)
-//            }
-//        }
-//        else {
-//            UserForm(loading = false, onCreateAccount = true) { email, password ->
-//                viewModel.userAccountCreate(email, password){
-//                    navController.navigate(BookReaderScreens.HomeScreen.name)
-//                }
-//            }
-//
-//        }
-//        Row(
-//            modifier = Modifier.padding(15.dp),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            val text = if (showLoginForm.value) "Sign Up" else "Login"
-//            val text2 = if (showLoginForm.value) "New User?" else "Already Registered?"
-//            Text(text = text2)
-//            Text(
-//                text,
-//                modifier = Modifier
-//                    .clickable {
-//                        showLoginForm.value = !showLoginForm.value
-//                    }
-//                    .padding(start = 5.dp),
-//                fontWeight = FontWeight.Bold,
-//                color = MaterialTheme.colors.secondaryVariant
-//            )
-//        }
-//    }
-//
-//}
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -114,7 +60,7 @@ fun UserForm(
             emailState = email,
             enabled = !loading,
             onAction = KeyboardActions { passwordFocusRequest.requestFocus() })
-        PasswordInput (Modifier.focusRequester(passwordFocusRequest),
+        PasswordInput (
             passwordState = password,
             labelId = "Password",
             enabled = !loading,

@@ -10,7 +10,8 @@ enum class BookReaderScreens {
     UpdateScreen,
     SignUpScreen,
     SplashScreen,
-    UserRegForm;
+    UserRegForm,
+    Categories;
     companion object {
         fun fromRoute(route: String): BookReaderScreens
         = when (route.substringBefore("/")) {
@@ -24,6 +25,7 @@ enum class BookReaderScreens {
             SignUpScreen.name -> SignUpScreen
             LoginScreen2.name -> LoginScreen2
             UserRegForm.name -> UserRegForm
+            Categories.name -> Categories
 
             null -> HomeScreen
             else -> throw IllegalArgumentException("This Route: $route is not found")

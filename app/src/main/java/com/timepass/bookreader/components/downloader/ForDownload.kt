@@ -24,10 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.timepass.bookreader.model.MyBooks
+import java.util.Date
 
 @Composable
 fun DownloadField(context: Context) {
@@ -120,7 +120,7 @@ fun saveDownloadLink(
 
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     val dbLink: CollectionReference = db.collection("bookDetails")
-    val details = MyBooks(title,author,bookImageLink,bookDownloadLink,bookDescription,timeStamp = Timestamp.now())
+    val details = MyBooks(title,author,bookImageLink,bookDownloadLink,bookDescription, timeStamp = Date())
 
 
     dbLink.add(details)
