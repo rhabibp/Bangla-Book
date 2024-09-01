@@ -28,5 +28,5 @@ Welcome to **Bangla Book Reader**—your go-to app for exploring and reading a w
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/YourUsername/BanglaBookReader.git
+   git clone https://github.com/rhabibp/BanglaBookReader.git
    cd BanglaBookReader
